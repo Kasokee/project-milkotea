@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "754441165761",
+    "project_id": "milkotea-virac",
+    "storage_bucket": "milkotea-virac.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:754441165761:android:12e02116454801e5f0ad40",
+        "android_client_info": {
+          "package_name": "com.example.milktea_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "754441165761-3m6rsc1lgd8sn9e21uqkr5k4ko5a7nl0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8wn8dLni0VOa5uDDNpngojPCwwcZKzcc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "754441165761-3m6rsc1lgd8sn9e21uqkr5k4ko5a7nl0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
