@@ -53,6 +53,20 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
       emit(CartLoaded(items: items));
       _saveToFirestore(items);
+    } else {
+      // Initialize cart if not loaded
+      final items = [
+        CartItem(
+          product: event.product,
+          size: event.size,
+          sugarLevel: event.sugarLevel,
+          addOns: event.addOns,
+          note: event.note,
+          quantity: 1,
+        )
+      ];
+      emit(CartLoaded(items: items));
+      _saveToFirestore(items);
     }
   }
 
@@ -110,7 +124,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       final items = cartData.map((e) => CartItemFirestore.fromMap(e)).toList();
       emit(CartLoaded(items: items));
     } catch (e) {
-      emit(CartError(message: 'Failed to load cart'));
+      emit(CartError('Failed to load cart'));
       emit(CartLoaded(items: []));
     }
   }

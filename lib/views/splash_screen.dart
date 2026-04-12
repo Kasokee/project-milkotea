@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
-import '../services/auth_service.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../bloc/auth/auth_bloc.dart';
+import '../bloc/auth/auth_state.dart';
+import '../bloc/cart/cart_bloc.dart';
+import '../bloc/cart/cart_event.dart';
 import 'auth/login_screen.dart';
 import 'product_menu_screen.dart';
 
@@ -12,47 +17,38 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen>
-    with SingleTickerProviderStateMixin {
+class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
   late Animation<double> _opacityAnimation;
-
-  final AuthService _authService = AuthService();
 
   @override
   void initState() {
     super.initState();
 
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 1200),
-      vsync: this,
-    );
+    _controller = AnimationController(duration: const Duration(milliseconds: 1200), vsync: this);
 
     _scaleAnimation = Tween<double>(begin: 0.5, end: 1.0).animate(
       CurvedAnimation(parent: _controller, curve: Curves.elasticOut),
     );
 
     _opacityAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: const Interval(0.0, 0.5, curve: Curves.easeIn),
-      ),
+      CurvedAnimation(parent: _controller, curve: const Interval(0.0, 0.5, curve: Curves.easeIn)),
     );
 
     _controller.forward();
-
     _checkLoginStatus();
   }
 
   Future<void> _checkLoginStatus() async {
     await Future.delayed(const Duration(milliseconds: 2500));
 
-    final isLoggedIn = await _authService.checkAuthStatus();
-
     if (!mounted) return;
 
-    if (isLoggedIn) {
+    final authState = context.read<AuthBloc>().state;
+
+    if (authState is Authenticated) {
+      context.read<CartBloc>().add(LoadCart(authState.userId));
       Navigator.pushReplacementNamed(context, ProductMenuScreen.route);
     } else {
       Navigator.pushReplacementNamed(context, LoginScreen.route);
@@ -71,10 +67,7 @@ class _SplashScreenState extends State<SplashScreen>
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [
-              Theme.of(context).primaryColor,
-              Theme.of(context).primaryColor.withOpacity(0.7),
-            ],
+            colors: [Theme.of(context).primaryColor, Theme.of(context).primaryColor.withOpacity(0.7)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -94,40 +87,16 @@ class _SplashScreenState extends State<SplashScreen>
                       decoration: BoxDecoration(
                         color: Colors.white,
                         shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.2),
-                            blurRadius: 20,
-                            offset: const Offset(0, 10),
-                          ),
-                        ],
+                        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.2), blurRadius: 20, offset: const Offset(0, 10))],
                       ),
-                      child: Icon(
-                        Icons.local_cafe,
-                        size: 80,
-                        color: Theme.of(context).primaryColor,
-                      ),
+                      child: Icon(Icons.local_cafe, size: 80, color: Theme.of(context).primaryColor),
                     ),
                     const SizedBox(height: 32),
-                    const Text(
-                      'MilkoTea',
-                      style: TextStyle(
-                        fontSize: 48,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        letterSpacing: 1.5,
-                      ),
-                    ),
+                    const Text('MilkoTea',
+                        style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold, color: Colors.white, letterSpacing: 1.5)),
                     const SizedBox(height: 8),
-                    Text(
-                      'Virac',
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.white.withOpacity(0.9),
-                        letterSpacing: 3,
-                        fontWeight: FontWeight.w300,
-                      ),
-                    ),
+                    Text('Virac',
+                        style: TextStyle(fontSize: 20, color: Colors.white.withOpacity(0.9), letterSpacing: 3, fontWeight: FontWeight.w300)),
                   ],
                 ),
               ),

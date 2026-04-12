@@ -15,7 +15,7 @@ class AddToCart extends CartEvent {
     required this.size,
     required this.sugarLevel,
     required this.addOns,
-    this.note
+    this.note,
   });
 }
 
@@ -23,10 +23,7 @@ class UpdateCartItemQuantity extends CartEvent {
   final CartItem item;
   final int delta;
 
-  UpdateCartItemQuantity({
-    required this.item,
-    required this.delta
-  });
+  UpdateCartItemQuantity({required this.item, required this.delta});
 }
 
 class RemoveFromCart extends CartEvent {
@@ -38,5 +35,5 @@ class ClearCart extends CartEvent {}
 
 class LoadCart extends CartEvent {
   final String userId;
-  LoadCart({required this.userId});
+  LoadCart(this.userId);
 }

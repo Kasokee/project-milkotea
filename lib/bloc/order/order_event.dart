@@ -31,4 +31,8 @@ class ProgressOrderStatus extends OrderEvent {}
 
 class LoadActiveOrder extends OrderEvent {}
 
-class ReorderLastOrder extends OrderEvent {}
+class SetPaymentMethod extends OrderEvent {
+  final PaymentMethod method;
+  SetPaymentMethod(this.method);
+}
+

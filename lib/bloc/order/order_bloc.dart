@@ -8,16 +8,18 @@ import 'order_state.dart';
 class OrderBloc extends Bloc<OrderEvent, OrderState> {
   final FirestoreService _firestoreService;
   Order? _activeOrder;
+  PaymentMethod _paymentMethod = PaymentMethod.cod;
 
   OrderBloc({FirestoreService? firestoreService})
       : _firestoreService = firestoreService ?? FirestoreService(),
         super(OrderInitial()) {
     on<PlaceOrder>(_onPlaceOrder);
     on<ProgressOrderStatus>(_onProgressOrderStatus);
-    on<ReorderLastOrder>(_onReorderLastOrder);
+    on<SetPaymentMethod>(_onSetPaymentMethod);
   }
 
   Order? get activeOrder => _activeOrder;
+  PaymentMethod get paymentMethod => _paymentMethod;
 
   Future<void> _onPlaceOrder(
     PlaceOrder event,
@@ -52,7 +54,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
       _activeOrder = order;
       emit(OrderPlaced(order));
     } catch (e) {
-      emit(OrderError('Failed to place order'));
+      emit(OrderError('Failed to place order: ${e.toString()}'));
     }
   }
 
@@ -72,11 +74,11 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     emit(OrderStatusUpdated(_activeOrder!));
   }
 
-  void _onReorderLastOrder(
-    ReorderLastOrder event,
+  void _onSetPaymentMethod(
+    SetPaymentMethod event,
     Emitter<OrderState> emit,
   ) {
-    // This should trigger cart to add items
-    // Handled by CartBloc in the UI layer
+    _paymentMethod = event.method;
+    emit(PaymentMethodUpdated(event.method));
   }
 }

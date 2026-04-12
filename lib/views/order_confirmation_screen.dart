@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../bloc/order/order_bloc.dart';
 import '../models/order.dart';
-import '../presenters/app_presenter.dart';
 import '../widgets/price_text.dart';
 import 'order_tracking_screen.dart';
 import 'product_menu_screen.dart';
@@ -14,9 +14,8 @@ class OrderConfirmationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final presenter = context.watch<AppPresenter>();
-    final order = presenter.activeOrder;
-    
+    final order = context.read<OrderBloc>().activeOrder;
+
     if (order == null) {
       return Scaffold(
         appBar: AppBar(title: const Text('Order Confirmation')),
@@ -38,33 +37,14 @@ class OrderConfirmationScreen extends StatelessWidget {
               const Spacer(),
               Container(
                 padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: Colors.green.withOpacity(0.1),
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  Icons.check_circle,
-                  size: 80,
-                  color: Colors.green[600],
-                ),
+                decoration: BoxDecoration(color: Colors.green.withOpacity(0.1), shape: BoxShape.circle),
+                child: Icon(Icons.check_circle, size: 80, color: Colors.green[600]),
               ),
               const SizedBox(height: 24),
-              Text(
-                'Order Confirmed!',
-                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.green[700],
-                    ),
-              ),
+              Text('Order Confirmed!',
+                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold, color: Colors.green[700])),
               const SizedBox(height: 12),
-              Text(
-                'Your order has been successfully placed',
-                style: TextStyle(
-                  color: Colors.grey[600],
-                  fontSize: 16,
-                ),
-                textAlign: TextAlign.center,
-              ),
+              Text('Your order has been successfully placed', style: TextStyle(color: Colors.grey[600], fontSize: 16), textAlign: TextAlign.center),
               const SizedBox(height: 32),
               Container(
                 width: double.infinity,
@@ -72,13 +52,7 @@ class OrderConfirmationScreen extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
-                      blurRadius: 10,
-                      offset: const Offset(0, 5),
-                    ),
-                  ],
+                  boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: const Offset(0, 5))],
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -86,26 +60,11 @@ class OrderConfirmationScreen extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          'Order #${order.orderId}',
-                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
-                        ),
+                        Text('Order #${order.orderId}', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                          decoration: BoxDecoration(
-                            color: Colors.orange.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Text(
-                            'Preparing',
-                            style: TextStyle(
-                              color: Colors.orange[700],
-                              fontWeight: FontWeight.bold,
-                              fontSize: 12,
-                            ),
-                          ),
+                          decoration: BoxDecoration(color: Colors.orange.withOpacity(0.1), borderRadius: BorderRadius.circular(20)),
+                          child: Text('Preparing', style: TextStyle(color: Colors.orange[700], fontWeight: FontWeight.bold, fontSize: 12)),
                         ),
                       ],
                     ),
@@ -117,18 +76,9 @@ class OrderConfirmationScreen extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text(
-                          'Total Paid',
-                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                        ),
-                        PriceText(
-                          order.totalPrice,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                            color: Theme.of(context).primaryColor,
-                          ),
-                        ),
+                        const Text('Total Paid', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                        PriceText(order.totalPrice,
+                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Theme.of(context).primaryColor)),
                       ],
                     ),
                   ],
@@ -141,15 +91,8 @@ class OrderConfirmationScreen extends StatelessWidget {
                 child: FilledButton.icon(
                   onPressed: () => Navigator.pushNamed(context, OrderTrackingScreen.route),
                   icon: const Icon(Icons.delivery_dining),
-                  label: const Text(
-                    'Track Order',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                  style: FilledButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
+                  label: const Text('Track Order', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  style: FilledButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
                 ),
               ),
               const SizedBox(height: 12),
@@ -157,20 +100,9 @@ class OrderConfirmationScreen extends StatelessWidget {
                 width: double.infinity,
                 height: 56,
                 child: OutlinedButton(
-                  onPressed: () => Navigator.pushNamedAndRemoveUntil(
-                    context,
-                    ProductMenuScreen.route,
-                    (route) => false,
-                  ),
-                  style: OutlinedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  child: const Text(
-                    'Back to Home',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
+                  onPressed: () => Navigator.pushNamedAndRemoveUntil(context, ProductMenuScreen.route, (route) => false),
+                  style: OutlinedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
+                  child: const Text('Back to Home', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                 ),
               ),
             ],
@@ -190,21 +122,9 @@ class OrderConfirmationScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                label,
-                style: TextStyle(
-                  color: Colors.grey[600],
-                  fontSize: 13,
-                ),
-              ),
+              Text(label, style: TextStyle(color: Colors.grey[600], fontSize: 13)),
               const SizedBox(height: 4),
-              Text(
-                value,
-                style: const TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 14,
-                ),
-              ),
+              Text(value, style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 14)),
             ],
           ),
         ),
@@ -212,6 +132,5 @@ class OrderConfirmationScreen extends StatelessWidget {
     );
   }
 
-  String _paymentText(PaymentMethod method) =>
-      method == PaymentMethod.cod ? 'Cash on Delivery (COD)' : 'GCash';
+  String _paymentText(PaymentMethod method) => method == PaymentMethod.cod ? 'Cash on Delivery (COD)' : 'GCash';
 }
