@@ -7,6 +7,7 @@ import 'bloc/cart/cart_bloc.dart';
 import 'bloc/order/order_bloc.dart';
 import 'bloc/product/product_bloc.dart';
 import 'bloc/product/product_event.dart';
+import 'services/local_db_service.dart';
 import 'views/splash_screen.dart';
 import 'views/auth/login_screen.dart';
 import 'views/auth/signup_screen.dart';
@@ -32,18 +33,12 @@ class MilkoTeaApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        BlocProvider(create: (context) => AuthBloc()..add(CheckAuthStatus())),
+        BlocProvider(create: (context) => ProductBloc()..add(LoadProducts())),
         BlocProvider(
-          create: (context) => AuthBloc()..add(CheckAuthStatus()),
+          create: (context) => CartBloc(localDbService: LocalDbService()),
         ),
-        BlocProvider(
-          create: (context) => ProductBloc()..add(LoadProducts()),
-        ),
-        BlocProvider(
-          create: (context) => CartBloc(),
-        ),
-        BlocProvider(
-          create: (context) => OrderBloc(),
-        ),
+        BlocProvider(create: (context) => OrderBloc()),
       ],
       child: MaterialApp(
         title: 'MilkoTea Virac',
