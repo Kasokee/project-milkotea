@@ -82,14 +82,11 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Container(
-                      padding: const EdgeInsets.all(30),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.circle,
-                        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.2), blurRadius: 20, offset: const Offset(0, 10))],
-                      ),
-                      child: Icon(Icons.local_cafe, size: 80, color: Theme.of(context).primaryColor),
+                    Image.asset(
+                      'lib/assets/milkotealogo.png',
+                      width: 120,
+                      height: 120,
+                      fit: BoxFit.contain,
                     ),
                     const SizedBox(height: 32),
                     const Text('MilkoTea',
