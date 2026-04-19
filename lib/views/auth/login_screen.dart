@@ -92,11 +92,11 @@ class _LoginScreenState extends State<LoginScreen> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           Center(
-                            child: Container(
-                              padding: const EdgeInsets.all(24),
-                              decoration: BoxDecoration(
-                                  color: Theme.of(context).primaryColor.withOpacity(0.1), shape: BoxShape.circle),
-                              child: Icon(Icons.local_cafe, size: 80, color: Theme.of(context).primaryColor),
+                            child: Image.asset(
+                              'lib/assets/milkotealogo.png',
+                              width: 120,
+                              height: 120,
+                              fit: BoxFit.contain,
                             ),
                           ),
                           const SizedBox(height: 32),
